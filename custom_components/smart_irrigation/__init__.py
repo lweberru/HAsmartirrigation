@@ -2262,6 +2262,9 @@ class SmartIrrigationCoordinator(
         # six child sensors of each zone stayed unavailable until a restart,
         # while the duration sensor beside them came back (#845).
         self.hass.data[const.DOMAIN].pop("zone_child_sensors", None)
+        # Discard all per-zone creation guards when their platforms unload.
+        for registry in ("zone_buttons", "zone_binary_sensors", "multiplier_numbers"):
+            self.hass.data[const.DOMAIN].pop(registry, None)
 
         # remove subscriptions for coordinator
         while self._subscriptions:
